@@ -5,10 +5,12 @@ import { ExcelReaderService } from './excel-reader/excel-reader.service';
 import { ExcelReaderModule } from './excel-reader/excel-reader.module';
 import { DataScraperService } from './data-scraper/data-scraper.service';
 import { DataScraperModule } from './data-scraper/data-scraper.module';
+import { PrismaService } from './prisma/prisma.service';
+import { PrismaModule } from './prisma/prisma.module';
 
 @Module({
-  imports: [ExcelReaderModule, DataScraperModule],
+  imports: [ExcelReaderModule, DataScraperModule, PrismaModule],
   controllers: [AppController],
-  providers: [AppService, ExcelReaderService, DataScraperService],
+  providers: [AppService, ExcelReaderService, DataScraperService, PrismaService],
 })
 export class AppModule {}
