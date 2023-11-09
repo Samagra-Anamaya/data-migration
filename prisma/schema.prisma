@@ -21,8 +21,8 @@ model BeneficiaryDetails {
   dateOfBirth            String
   socialCategory         String
   address                String
-  discrictName           String
-  discrictCode           String
+  districtName           String
+  districtLGDCode        String
   blockName              String
   blockLGDCode           String
   gpName                 String
@@ -32,6 +32,6 @@ model BeneficiaryDetails {
   isDisable              String
   maritalStatus          String
   educationQualification String
-  spdpMemberid           String
+  spdpMemberId           String
   numberOfMemberInFamily String
 }

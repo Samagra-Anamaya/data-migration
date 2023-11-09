@@ -17,21 +17,30 @@ export class DataScraperService implements OnApplicationBootstrap {
   }
 
   async scrapeSPDPData() {
-    let nextLine = this.excelReaderService.readNextLine();
-    while (nextLine !== null) {
-      nextLine = this.excelReaderService.readNextLine();
+    let districtLGDCode = this.excelReaderService.readNextLine();
+    while (districtLGDCode !== null) {
+      console.log(`Fetching data for districtLGDCode ${districtLGDCode}`);
+      await this.fetchDataFromDistrictLGDCode(districtLGDCode);
+      districtLGDCode = this.excelReaderService.readNextLine();
+    }
+  }
+
+  async fetchDataFromDistrictLGDCode(districtLGDCode: string) {
+    let currentBatch = '0/n';
+    while (currentBatch.split('/')[0] !== currentBatch.split('/')[1]) {
       let response;
       try {
         response = await axios.post(this.baseUrl, {
-          data: nextLine,
+          distLGDCode: districtLGDCode,
         });
       } catch (error) {
         throw error;
       }
-      console.log(response.data);
-      for (const benefitiary of response.data.beneficiaryDetails) {
-        console.log(benefitiary);
-      }
+      currentBatch = response.data.currentBatch;
+      console.log(response.data.beneficiaryDetails);
+      await this.prismaService.saveBeneficiaryDetails(
+        response.data.beneficiaryDetails,
+      );
     }
   }
 }

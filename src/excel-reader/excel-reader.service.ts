@@ -8,7 +8,7 @@ export class ExcelReaderService {
   private currentRow = 3;
 
   constructor() {
-    const workbook = XLSX.readFile('VillageDetails.xlsx');
+    const workbook = XLSX.readFile('DistrictDetails.xlsx');
     const sheetName = workbook.SheetNames[0];
 
     this.workbook = workbook;
@@ -21,7 +21,7 @@ export class ExcelReaderService {
     }
 
     const cellValue =
-      this.worksheet[XLSX.utils.encode_cell({ r: this.currentRow, c: 31 })];
+      this.worksheet[XLSX.utils.encode_cell({ r: this.currentRow, c: 3 })];
     this.currentRow++;
 
     return cellValue ? cellValue.v : null;
