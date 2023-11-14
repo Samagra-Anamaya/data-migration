@@ -5,7 +5,7 @@ CREATE TABLE "BeneficiaryDetails" (
     "beneficiaryName" TEXT NOT NULL,
     "beneficiaryFatherName" TEXT NOT NULL,
     "beneficiaryMotherName" TEXT NOT NULL,
-    "beneficiarySpouceName" TEXT NOT NULL,
+    "beneficiarySpouseName" TEXT NOT NULL,
     "gender" TEXT NOT NULL,
     "dateOfBirth" TEXT NOT NULL,
     "socialCategory" TEXT NOT NULL,
@@ -20,7 +20,7 @@ CREATE TABLE "BeneficiaryDetails" (
     "villageLGDCode" TEXT NOT NULL,
     "isDisable" TEXT NOT NULL,
     "maritalStatus" TEXT NOT NULL,
-    "educationQualification" TEXT NOT NULL,
+    "educationalQualification" TEXT NOT NULL,
     "spdpMemberId" TEXT NOT NULL,
     "numberOfMemberInFamily" TEXT NOT NULL,
 

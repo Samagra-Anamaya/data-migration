@@ -28,8 +28,8 @@ export class PrismaService extends PrismaClient {
         beneficiaryMotherName: beneficiary.beneficiaryMotherName
           ? beneficiary.beneficiaryMotherName
           : '',
-        beneficiarySpouceName: beneficiary.beneficiarySpouceName
-          ? beneficiary.beneficiarySpouceName
+        beneficiarySpouseName: beneficiary.beneficiarySpouseName
+          ? beneficiary.beneficiarySpouseName
           : '',
         gender: beneficiary.gender ? beneficiary.gender : '',
         dateOfBirth: beneficiary.dateOfBirth ? beneficiary.dateOfBirth : '',
@@ -53,8 +53,8 @@ export class PrismaService extends PrismaClient {
         maritalStatus: beneficiary.maritalStatus
           ? beneficiary.maritalStatus
           : '',
-        educationQualification: beneficiary.educationQualification
-          ? beneficiary.educationQualification
+        educationalQualification: beneficiary.educationalQualification
+          ? beneficiary.educationalQualification
           : '',
         spdpMemberId: beneficiary.spdpMemberId ? beneficiary.spdpMemberId : '',
         numberOfMemberInFamily: beneficiary.numberOfMemberInFamily
