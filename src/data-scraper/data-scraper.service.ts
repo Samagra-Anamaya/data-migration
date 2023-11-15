@@ -43,9 +43,15 @@ export class DataScraperService implements OnApplicationBootstrap {
   }
 
   async scrapeSPDPData() {
-    const securityKey = await this.authenticateUser();
+    console.log('Authenticating user');
+    let securityKey;
+    while (securityKey === undefined) {
+      securityKey = await this.authenticateUser();
+    }
+    console.log(`Authenticated with securityKey ${securityKey}`);
     let districtLGDCode = this.excelReaderService.readNextLine();
     while (districtLGDCode !== null) {
+      console.log(`Fetching details for distLGDCode ${districtLGDCode}`);
       await this.fetchDataFromDistrictLGDCode(districtLGDCode, securityKey);
       districtLGDCode = this.excelReaderService.readNextLine();
     }
@@ -71,12 +77,12 @@ export class DataScraperService implements OnApplicationBootstrap {
           { headers: headers },
         );
       } catch (error) {
-        throw new HttpException(
-          `Can't fetch SPTP data for distLGDCode ${districtLGDCode}`,
-          HttpStatus.INTERNAL_SERVER_ERROR,
-        );
+        continue;
       }
       currentBatch = response.data.currentBatch;
+      console.log(
+        `Fetched data for batch for distLGDCode ${districtLGDCode} and ${currentBatch} with batch size ${response.data.beneficiaryDetails.length}`,
+      );
       await this.prismaService.saveBeneficiaryDetails(
         response.data.beneficiaryDetails,
       );
