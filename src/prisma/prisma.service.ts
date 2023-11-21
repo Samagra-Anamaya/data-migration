@@ -1,5 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { PrismaClient } from '@prisma/client';
+import { SchemeTransactionDto } from 'src/ste/dto/scheme.transaction.dto';
 
 @Injectable()
 export class PrismaService extends PrismaClient {
@@ -69,6 +70,12 @@ export class PrismaService extends PrismaClient {
     const record = await this.createRecord(beneficiaryDetails);
     await this.beneficiaryDetails.createMany({
       data: record,
+    });
+  }
+
+  async saveSchemeTransaction(schemeTransactions: SchemeTransactionDto[]) {
+    await this.schemeTransaction.createMany({
+      data: schemeTransactions,
     });
   }
 }

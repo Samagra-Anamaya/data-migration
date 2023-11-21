@@ -7,8 +7,10 @@ export class SteController {
   constructor(private readonly steService: SteService) {}
 
   @Post('/saveSchemeTransaction')
-  saveSchemeTransaction(@Body() schemeTransactionDetail: SchemeTransactionDto) {
+  saveSchemeTransaction(
+    @Body() schemeTransactionDetail: SchemeTransactionDto[],
+  ) {
     console.log(schemeTransactionDetail);
-    return this.steService.saveSchemeTransaction();
+    return this.steService.saveSchemeTransaction(schemeTransactionDetail);
   }
 }

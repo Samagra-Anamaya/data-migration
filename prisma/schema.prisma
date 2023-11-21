@@ -35,3 +35,18 @@ model BeneficiaryDetails {
   spdpMemberId             String
   numberOfMemberInFamily   String
 }
+
+model SchemeTransaction {
+  id                     Int     @id @default(autoincrement())
+  schemeCode             String
+  aadhaarNumber          String
+  aadhaarReferenceNumber String
+  uniqueBeneficiaryId    String
+  financialYear          String
+  transactionType        String
+  transactionAmount      Int
+  inKindBenefitDetail    String
+  transactionDate        String
+  remarks                String?
+  departmentData         Json?
+}
