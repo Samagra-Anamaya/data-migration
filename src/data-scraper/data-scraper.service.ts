@@ -1,11 +1,7 @@
-import {
-  HttpException,
-  HttpStatus,
-  Injectable,
-  OnApplicationBootstrap,
-} from '@nestjs/common';
+import { Injectable, OnApplicationBootstrap } from '@nestjs/common';
 import axios from 'axios';
 import { ExcelReaderService } from 'src/excel-reader/excel-reader.service';
+import { LoggerService } from 'src/logger/logger.service';
 import { PrismaService } from 'src/prisma/prisma.service';
 
 @Injectable()
@@ -13,6 +9,7 @@ export class DataScraperService implements OnApplicationBootstrap {
   constructor(
     private readonly excelReaderService: ExcelReaderService,
     private readonly prismaService: PrismaService,
+    private readonly loggerService: LoggerService,
   ) {}
 
   private spdpBaseUrl = process.env.SPDP_URL;
@@ -34,10 +31,12 @@ export class DataScraperService implements OnApplicationBootstrap {
       );
       authResponse = response.data;
     } catch (error) {
-      throw new HttpException('Cannot authenticate user', HttpStatus.FORBIDDEN);
+      this.loggerService.error('Failed to call Auth API');
     }
-    if (authResponse.status !== 'Success') {
-      throw new HttpException('Wrong auth credentials', HttpStatus.FORBIDDEN);
+    console.log(authResponse);
+    if (!authResponse || authResponse.status !== 'Success') {
+      this.loggerService.error('Wrong auth credentials');
+      return '';
     }
     return authResponse.securityKey;
   }
@@ -48,11 +47,11 @@ export class DataScraperService implements OnApplicationBootstrap {
     while (securityKey === undefined) {
       securityKey = await this.authenticateUser();
     }
-    console.log(`Authenticated with securityKey ${securityKey}`);
+    this.loggerService.success(`Authenticated and received securityKey`);
     let districtLGDCode = this.excelReaderService.readNextLine();
     while (districtLGDCode !== null) {
       console.log(`Fetching details for distLGDCode ${districtLGDCode}`);
-      await this.fetchDataFromDistrictLGDCode(districtLGDCode, securityKey);
+      this.fetchDataFromDistrictLGDCode(districtLGDCode, securityKey);
       districtLGDCode = this.excelReaderService.readNextLine();
     }
   }
@@ -77,11 +76,19 @@ export class DataScraperService implements OnApplicationBootstrap {
           { headers: headers },
         );
       } catch (error) {
+        this.loggerService.error(
+          `Error fetching data for batch ${
+            Number(currentBatch.split('/')[0]) + 1
+          }/${currentBatch.split('/')[1]} and distLGDCode ${districtLGDCode}`,
+        );
         continue;
       }
       currentBatch = response.data.currentBatch;
+      this.loggerService.success(
+        `Success fetching data for batch ${currentBatch} and distLDGCode ${districtLGDCode}`,
+      );
       console.log(
-        `Fetched data for batch for distLGDCode ${districtLGDCode} and ${currentBatch} with batch size ${response.data.beneficiaryDetails.length}`,
+        `Success fetching data for batch ${currentBatch} and distLDGCode ${districtLGDCode}`,
       );
       await this.prismaService.saveBeneficiaryDetails(
         response.data.beneficiaryDetails,

@@ -10,9 +10,10 @@ import { PrismaModule } from './prisma/prisma.module';
 import { SteController } from './ste/ste.controller';
 import { SteService } from './ste/ste.service';
 import { SteModule } from './ste/ste.module';
+import { LoggerModule } from './logger/logger.module';
 
 @Module({
-  imports: [ExcelReaderModule, DataScraperModule, PrismaModule, SteModule],
+  imports: [ExcelReaderModule, DataScraperModule, PrismaModule, SteModule, LoggerModule],
   controllers: [AppController, SteController],
   providers: [
     AppService,
