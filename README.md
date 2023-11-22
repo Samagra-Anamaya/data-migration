@@ -33,13 +33,13 @@ $ npm run start:prod
 
 ## Running Scraper using curl
 ```bash
-# running scraper for specific district
+# run scraper for specific district
 curl --location 'http://localhost:7878/data-scraper/scrapeDataForDistrict' \
 --header 'Content-Type: application/json' \
 --data '{
     "districtLGDCode": "344"
 }'
 
-# runnign scraper for all districts
+# run scraper for all districts
 curl --location --request POST 'http://localhost:7878/data-scraper/scrapeData'
 ```
