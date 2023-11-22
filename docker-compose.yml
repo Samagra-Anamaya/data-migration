@@ -1,7 +1,7 @@
 version: '3'
 
 services:
-  bff-db:
+  scraper-db:
     image: postgres:15.3-alpine3.18
     environment:
       - POSTGRES_USER=${POSTGRES_USER}

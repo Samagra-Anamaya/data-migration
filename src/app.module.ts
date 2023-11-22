@@ -11,10 +11,17 @@ import { SteController } from './ste/ste.controller';
 import { SteService } from './ste/ste.service';
 import { SteModule } from './ste/ste.module';
 import { LoggerModule } from './logger/logger.module';
+import { DataScraperController } from './data-scraper/data-scraper.controller';
 
 @Module({
-  imports: [ExcelReaderModule, DataScraperModule, PrismaModule, SteModule, LoggerModule],
-  controllers: [AppController, SteController],
+  imports: [
+    ExcelReaderModule,
+    DataScraperModule,
+    PrismaModule,
+    SteModule,
+    LoggerModule,
+  ],
+  controllers: [AppController, SteController, DataScraperController],
   providers: [
     AppService,
     ExcelReaderService,

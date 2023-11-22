@@ -1,11 +1,11 @@
-import { Injectable, OnApplicationBootstrap } from '@nestjs/common';
+import { Injectable } from '@nestjs/common';
 import axios from 'axios';
 import { ExcelReaderService } from 'src/excel-reader/excel-reader.service';
 import { LoggerService } from 'src/logger/logger.service';
 import { PrismaService } from 'src/prisma/prisma.service';
 
 @Injectable()
-export class DataScraperService implements OnApplicationBootstrap {
+export class DataScraperService {
   constructor(
     private readonly excelReaderService: ExcelReaderService,
     private readonly prismaService: PrismaService,
@@ -13,10 +13,6 @@ export class DataScraperService implements OnApplicationBootstrap {
   ) {}
 
   private spdpBaseUrl = process.env.SPDP_URL;
-
-  async onApplicationBootstrap() {
-    await this.scrapeSPDPData();
-  }
 
   async authenticateUser() {
     const payload = {
@@ -41,6 +37,17 @@ export class DataScraperService implements OnApplicationBootstrap {
     return authResponse.securityKey;
   }
 
+  async scrapeDataForDistrict(districtLGDCode: string) {
+    console.log('Authenticating user');
+    let securityKey;
+    while (securityKey === undefined) {
+      securityKey = await this.authenticateUser();
+    }
+    this.loggerService.success(`Authenticated and received securityKey`);
+    await this.fetchDataForDistrictLGDCode(districtLGDCode, securityKey);
+    return 'success';
+  }
+
   async scrapeSPDPData() {
     console.log('Authenticating user');
     let securityKey;
@@ -51,12 +58,12 @@ export class DataScraperService implements OnApplicationBootstrap {
     let districtLGDCode = this.excelReaderService.readNextLine();
     while (districtLGDCode !== null) {
       console.log(`Fetching details for distLGDCode ${districtLGDCode}`);
-      this.fetchDataFromDistrictLGDCode(districtLGDCode, securityKey);
+      this.fetchDataForDistrictLGDCode(districtLGDCode, securityKey);
       districtLGDCode = this.excelReaderService.readNextLine();
     }
   }
 
-  async fetchDataFromDistrictLGDCode(
+  async fetchDataForDistrictLGDCode(
     districtLGDCode: string,
     securityKey: string,
   ) {
