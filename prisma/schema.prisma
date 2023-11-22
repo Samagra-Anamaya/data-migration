@@ -11,29 +11,32 @@ datasource db {
 }
 
 model BeneficiaryDetails {
-  id                       Int    @id @default(autoincrement())
-  aadhaarVaultReference    String
-  beneficiaryName          String
-  beneficiaryFatherName    String
-  beneficiaryMotherName    String
-  beneficiarySpouseName    String
-  gender                   String
-  dateOfBirth              String
-  socialCategory           String
-  address                  String
-  districtName             String
-  districtLGDCode          String
-  blockName                String
-  blockLGDCode             String
-  gpName                   String
-  gpLGDCode                String
-  villageName              String
-  villageLGDCode           String
-  isDisable                String
-  maritalStatus            String
-  educationalQualification String
-  spdpMemberId             String
-  numberOfMemberInFamily   String
+  id                        Int    @id @default(autoincrement())
+  aadhaarVaultReference     String
+  beneficiaryName           String
+  beneficiaryFatherName     String
+  beneficiaryMotherName     String
+  beneficiarySpouseName     String
+  gender                    String
+  dateOfBirth               String
+  socialCategory            String
+  address                   String
+  districtName              String
+  districtLGDCode           String
+  blockName                 String
+  blockLGDCode              String
+  gpName                    String
+  gpLGDCode                 String
+  villageName               String
+  villageLGDCode            String
+  isDisable                 String
+  maritalStatus             String
+  educationalQualification  String
+  spdpMemberId              String
+  numberOfMemberInFamily    String
+  rationCardNumber          String
+  primarySourceOfLivelihood String
+  spdpFamilyId              String
 }
 
 model SchemeTransaction {

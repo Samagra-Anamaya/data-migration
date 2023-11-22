@@ -23,6 +23,27 @@ CREATE TABLE "BeneficiaryDetails" (
     "educationalQualification" TEXT NOT NULL,
     "spdpMemberId" TEXT NOT NULL,
     "numberOfMemberInFamily" TEXT NOT NULL,
+    "rationCardNumber" TEXT NOT NULL,
+    "primarySourceOfLivelihood" TEXT NOT NULL,
+    "spdpFamilyId" TEXT NOT NULL,
 
     CONSTRAINT "BeneficiaryDetails_pkey" PRIMARY KEY ("id")
+);
+
+-- CreateTable
+CREATE TABLE "SchemeTransaction" (
+    "id" SERIAL NOT NULL,
+    "schemeCode" TEXT NOT NULL,
+    "aadhaarNumber" TEXT NOT NULL,
+    "aadhaarReferenceNumber" TEXT NOT NULL,
+    "uniqueBeneficiaryId" TEXT NOT NULL,
+    "financialYear" TEXT NOT NULL,
+    "transactionType" TEXT NOT NULL,
+    "transactionAmount" INTEGER NOT NULL,
+    "inKindBenefitDetail" TEXT NOT NULL,
+    "transactionDate" TEXT NOT NULL,
+    "remarks" TEXT,
+    "departmentData" JSONB,
+
+    CONSTRAINT "SchemeTransaction_pkey" PRIMARY KEY ("id")
 );

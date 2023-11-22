@@ -7,6 +7,7 @@ export class SteService {
   constructor(private readonly prismaService: PrismaService) {}
 
   async saveSchemeTransaction(schemetransactions: SchemeTransactionDto[]) {
-    return 'hehe';
+    await this.prismaService.saveSchemeTransaction(schemetransactions);
+    return 'Record Saved';
   }
 }

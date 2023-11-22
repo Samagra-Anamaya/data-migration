@@ -61,6 +61,13 @@ export class PrismaService extends PrismaClient {
         numberOfMemberInFamily: beneficiary.numberOfMemberInFamily
           ? beneficiary.numberOfMemberInFamily
           : '',
+        rationCardNumber: beneficiary.rationCardNumber
+          ? beneficiary.rationCardNumber
+          : '',
+        primarySourceOfLivelihood: beneficiary.primarySourceOfLivelihood
+          ? beneficiary.primarySourceOfLivelihood
+          : '',
+        spdpFamilyId: beneficiary.spdpFamilyId ? beneficiary.spdpFamilyId : '',
       };
     });
     return record;
