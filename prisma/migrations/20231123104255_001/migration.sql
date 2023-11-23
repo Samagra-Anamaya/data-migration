@@ -1,6 +1,5 @@
 -- CreateTable
 CREATE TABLE "BeneficiaryDetails" (
-    "id" SERIAL NOT NULL,
     "aadhaarVaultReference" TEXT NOT NULL,
     "beneficiaryName" TEXT NOT NULL,
     "beneficiaryFatherName" TEXT NOT NULL,
@@ -27,7 +26,7 @@ CREATE TABLE "BeneficiaryDetails" (
     "primarySourceOfLivelihood" TEXT NOT NULL,
     "spdpFamilyId" TEXT NOT NULL,
 
-    CONSTRAINT "BeneficiaryDetails_pkey" PRIMARY KEY ("id")
+    CONSTRAINT "BeneficiaryDetails_pkey" PRIMARY KEY ("aadhaarVaultReference")
 );
 
 -- CreateTable

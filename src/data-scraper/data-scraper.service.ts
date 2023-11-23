@@ -92,14 +92,20 @@ export class DataScraperService {
       }
       currentBatch = response.data.currentBatch;
       this.loggerService.success(
-        `Success fetching data for batch ${currentBatch} and distLDGCode ${districtLGDCode}`,
+        `Success fetching data for batch ${currentBatch} and distLGDCode ${districtLGDCode}`,
       );
       console.log(
-        `Success fetching data for batch ${currentBatch} and distLDGCode ${districtLGDCode}`,
+        `Success fetching data for batch ${currentBatch} and distLGDCode ${districtLGDCode}`,
       );
-      await this.prismaService.saveBeneficiaryDetails(
-        response.data.beneficiaryDetails,
-      );
+      try {
+        await this.prismaService.saveBeneficiaryDetails(
+          response.data.beneficiaryDetails,
+        );
+      } catch (error) {
+        this.loggerService.error(
+          `Error saving data for batch ${currentBatch} and disrictLGDCode ${districtLGDCode}`,
+        );
+      }
     }
   }
 }
