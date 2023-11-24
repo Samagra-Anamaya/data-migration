@@ -29,6 +29,7 @@ export class DataScraperService {
       authResponse = response.data;
     } catch (error) {
       this.loggerService.error('Failed to call Auth API');
+      return undefined;
     }
     console.log(authResponse);
     if (!authResponse || authResponse.status !== 'Success') {
@@ -40,21 +41,17 @@ export class DataScraperService {
 
   async scrapeDataForDistrict(districtLGDCode: string) {
     console.log('Authenticating user');
-    let securityKey;
-    while (securityKey === undefined) {
-      securityKey = await this.authenticateUser();
-    }
+    const securityKey = await this.authenticateUser();
+    if (!securityKey) return { message: 'auth failed' };
     this.loggerService.success(`Authenticated and received securityKey`);
     this.fetchDataForDistrictLGDCode(districtLGDCode, securityKey);
-    return 'success';
+    return { message: 'success' };
   }
 
   async scrapeSPDPData() {
     console.log('Authenticating user');
-    let securityKey;
-    while (securityKey === undefined) {
-      securityKey = await this.authenticateUser();
-    }
+    const securityKey = await this.authenticateUser();
+    if (!securityKey) return { message: 'auth failed' };
     this.loggerService.success(`Authenticated and received securityKey`);
     let districtLGDCode = this.excelReaderService.readNextLine();
     while (districtLGDCode !== null) {
@@ -62,7 +59,7 @@ export class DataScraperService {
       this.fetchDataForDistrictLGDCode(districtLGDCode, securityKey);
       districtLGDCode = this.excelReaderService.readNextLine();
     }
-    return 'success';
+    return { message: 'success' };
   }
 
   async fetchDataForDistrictLGDCode(
