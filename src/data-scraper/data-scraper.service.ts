@@ -91,7 +91,7 @@ export class DataScraperService {
 
     // 1/n as we don't know number of batches per district until we fetch atleast one
     // currentBatch updated on each successful data pull
-    let currentBatch = '1/n';
+    let currentBatch = '0/n';
 
     const latestBatch = await this.prismaService.getLatestBatch(
       districtLGDCode,
@@ -103,7 +103,7 @@ export class DataScraperService {
     }
 
     // loop breaks when currentBatch = 'n/n' that is the last batch
-    while (currentBatch.split('/')[0] !== currentBatch.split('/')[1]) {
+    while (String(batch_no) !== total_batch) {
       let response;
       const payload = {
         distLGDCode: districtLGDCode,

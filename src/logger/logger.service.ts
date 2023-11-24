@@ -26,13 +26,13 @@ export class LoggerService {
 
   success(message: string, distLGDCode: string) {
     console.log(message);
-    const filePath = `${this.successLogDir}/${distLGDCode}.log`;
-    this.writeToFile(message, filePath);
+    // const filePath = `${this.successLogDir}/${distLGDCode}.log`;
+    // this.writeToFile(message, filePath);
   }
 
   error(message: string, distLGDCode: string) {
     console.error(message);
-    const filePath = `${this.errorLogDir}/${distLGDCode}.log`;
-    this.writeToFile(message, filePath);
+    // const filePath = `${this.errorLogDir}/${distLGDCode}.log`;
+    // this.writeToFile(message, filePath);
   }
 }

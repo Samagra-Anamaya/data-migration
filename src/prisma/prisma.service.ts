@@ -128,14 +128,20 @@ export class PrismaService extends PrismaClient {
     batch_no: string,
     total_batch: string,
   ) {
-    await this.data_migration_status.update({
+    await this.data_migration_status.upsert({
       where: {
         district_code_batch_no: {
           district_code: districtLGDCode,
           batch_no: batch_no,
         },
       },
-      data: {
+      update: {
+        total_batch: total_batch,
+        status: Status.PULLED,
+      },
+      create: {
+        district_code: districtLGDCode,
+        batch_no: batch_no,
         total_batch: total_batch,
         status: Status.PULLED,
       },
