@@ -1,44 +1,38 @@
 import { Injectable } from '@nestjs/common';
-import * as winston from 'winston';
 import * as path from 'path';
 import * as fs from 'fs';
 
 @Injectable()
 export class LoggerService {
-  private successLogger: winston.Logger;
-  private errorLogger: winston.Logger;
+  private successLogDir: string;
+  private errorLogDir: string;
 
   constructor() {
-    const logDirectory = path.join(__dirname, 'logs');
-    if (!fs.existsSync(logDirectory)) {
-      fs.mkdirSync(logDirectory);
+    this.successLogDir = path.join(__dirname, 'success');
+    this.errorLogDir = path.join(__dirname, 'error');
+    if (!fs.existsSync(this.successLogDir)) {
+      fs.mkdirSync(this.successLogDir);
     }
-
-    this.successLogger = winston.createLogger({
-      level: 'info',
-      format: winston.format.simple(),
-      transports: [
-        new winston.transports.File({
-          filename: path.join(logDirectory, 'success.log'),
-        }),
-      ],
-    });
-    this.errorLogger = winston.createLogger({
-      level: 'error',
-      format: winston.format.simple(),
-      transports: [
-        new winston.transports.File({
-          filename: path.join(logDirectory, 'error.log'),
-        }),
-      ],
-    });
+    if (!fs.existsSync(this.errorLogDir)) {
+      fs.mkdirSync(this.errorLogDir);
+    }
   }
 
-  success(message: string) {
-    this.successLogger.info(message);
+  writeToFile(message: string, filePath) {
+    const writeStream = fs.createWriteStream(filePath);
+    writeStream.write(`${message}\n`);
+    writeStream.close();
   }
 
-  error(message: string) {
-    this.errorLogger.error(message);
+  success(message: string, distLGDCode: string) {
+    console.log(message);
+    const filePath = `${this.successLogDir}/${distLGDCode}.log`;
+    this.writeToFile(message, filePath);
+  }
+
+  error(message: string, distLGDCode: string) {
+    console.error(message);
+    const filePath = `${this.errorLogDir}/${distLGDCode}.log`;
+    this.writeToFile(message, filePath);
   }
 }

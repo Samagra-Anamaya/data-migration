@@ -1,5 +1,5 @@
 import { Injectable } from '@nestjs/common';
-import { PrismaClient } from '@prisma/client';
+import { PrismaClient, Status } from '@prisma/client';
 import { SchemeTransactionDto } from 'src/ste/dto/scheme.transaction.dto';
 
 @Injectable()
@@ -83,6 +83,138 @@ export class PrismaService extends PrismaClient {
   async saveSchemeTransaction(schemeTransactions: SchemeTransactionDto[]) {
     await this.scheme_transaction.createMany({
       data: schemeTransactions,
+    });
+  }
+
+  async getLatestBatch(distLGDCode: string) {
+    return await this.data_migration_status.findMany({
+      where: {
+        district_code: distLGDCode,
+      },
+      orderBy: {
+        batch_no: 'desc',
+      },
+      take: 1,
+    });
+  }
+
+  async dataFetchStarted(
+    districtLGDCode: string,
+    batch_no: string,
+    total_batch: string,
+  ) {
+    await this.data_migration_status.upsert({
+      where: {
+        district_code_batch_no: {
+          district_code: districtLGDCode,
+          batch_no: batch_no,
+        },
+      },
+      update: {
+        total_batch: total_batch,
+        status: Status.STARTED,
+      },
+      create: {
+        district_code: districtLGDCode,
+        batch_no: batch_no,
+        total_batch: total_batch,
+        status: Status.STARTED,
+      },
+    });
+  }
+
+  async dataPulled(
+    districtLGDCode: string,
+    batch_no: string,
+    total_batch: string,
+  ) {
+    await this.data_migration_status.update({
+      where: {
+        district_code_batch_no: {
+          district_code: districtLGDCode,
+          batch_no: batch_no,
+        },
+      },
+      data: {
+        total_batch: total_batch,
+        status: Status.PULLED,
+      },
+    });
+  }
+
+  async dataSavedInDatabase(
+    districtLGDCode: string,
+    batch_no: string,
+    total_batch: string,
+  ) {
+    await this.data_migration_status.update({
+      where: {
+        district_code_batch_no: {
+          district_code: districtLGDCode,
+          batch_no: batch_no,
+        },
+      },
+      data: {
+        total_batch: total_batch,
+        status: Status.SAVED_IN_DATABASE,
+      },
+    });
+  }
+
+  async dataSavedInFile(
+    districtLGDCode: string,
+    batch_no: string,
+    total_batch: string,
+  ) {
+    await this.data_migration_status.update({
+      where: {
+        district_code_batch_no: {
+          district_code: districtLGDCode,
+          batch_no: batch_no,
+        },
+      },
+      data: {
+        total_batch: total_batch,
+        status: Status.SAVED_IN_FILE,
+      },
+    });
+  }
+
+  async dataPullFailed(
+    districtLGDCode: string,
+    batch_no: string,
+    total_batch: string,
+  ) {
+    await this.data_migration_status.update({
+      where: {
+        district_code_batch_no: {
+          district_code: districtLGDCode,
+          batch_no: batch_no,
+        },
+      },
+      data: {
+        total_batch: total_batch,
+        status: Status.FAILED_DURING_PULL,
+      },
+    });
+  }
+
+  async dataSaveFailed(
+    districtLGDCode: string,
+    batch_no: string,
+    total_batch: string,
+  ) {
+    await this.data_migration_status.update({
+      where: {
+        district_code_batch_no: {
+          district_code: districtLGDCode,
+          batch_no: batch_no,
+        },
+      },
+      data: {
+        total_batch: total_batch,
+        status: Status.FAILED_DURING_SAVE,
+      },
     });
   }
 }

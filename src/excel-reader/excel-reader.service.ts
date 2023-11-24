@@ -26,4 +26,8 @@ export class ExcelReaderService {
 
     return cellValue ? cellValue.v : null;
   }
+
+  resetReader() {
+    this.currentRow = 3;
+  }
 }

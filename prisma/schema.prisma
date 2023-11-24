@@ -52,3 +52,22 @@ model scheme_transaction {
   remarks                String?
   departmentData         Json?
 }
+
+model data_migration_status {
+  id            Int    @id @default(autoincrement())
+  district_code String
+  batch_no      String
+  total_batch   String
+  status        Status
+
+  @@unique([district_code, batch_no])
+}
+
+enum Status {
+  STARTED
+  PULLED
+  SAVED_IN_DATABASE
+  SAVED_IN_FILE
+  FAILED_DURING_PULL
+  FAILED_DURING_SAVE
+}
