@@ -3,6 +3,7 @@ import axios from 'axios';
 import { ExcelReaderService } from 'src/excel-reader/excel-reader.service';
 import { LoggerService } from 'src/logger/logger.service';
 import { PrismaService } from 'src/prisma/prisma.service';
+import * as fs from 'fs';
 
 @Injectable()
 export class DataScraperService {
@@ -101,9 +102,14 @@ export class DataScraperService {
         await this.prismaService.saveBeneficiaryDetails(
           response.data.beneficiaryDetails,
         );
-      } catch (error) {
-        this.loggerService.error(
-          `Error saving data for batch ${currentBatch} and disrictLGDCode ${districtLGDCode}`,
+      } catch (_error) {
+        // save response data to file
+        const filePath = `${__dirname}/${districtLGDCode}_${
+          currentBatch.split('/')[0]
+        }`;
+        fs.writeFileSync(filePath, JSON.stringify(response.data), 'utf-8');
+        this.loggerService.success(
+          `Flushed response data to file: ${filePath}`,
         );
       }
     }
