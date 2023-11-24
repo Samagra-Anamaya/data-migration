@@ -8,7 +8,7 @@ export class ExcelReaderService {
   private currentRow = 3;
 
   constructor() {
-    const workbook = XLSX.readFile('DistrictDetails.xlsx');
+    const workbook = XLSX.readFile('details.xlsx');
     const sheetName = workbook.SheetNames[0];
 
     this.workbook = workbook;
