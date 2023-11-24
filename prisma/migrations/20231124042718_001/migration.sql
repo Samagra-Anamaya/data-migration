@@ -1,5 +1,5 @@
 -- CreateTable
-CREATE TABLE "BeneficiaryDetails" (
+CREATE TABLE "beneficiary_detail" (
     "aadhaarVaultReference" TEXT NOT NULL,
     "beneficiaryName" TEXT NOT NULL,
     "beneficiaryFatherName" TEXT NOT NULL,
@@ -26,11 +26,11 @@ CREATE TABLE "BeneficiaryDetails" (
     "primarySourceOfLivelihood" TEXT NOT NULL,
     "spdpFamilyId" TEXT NOT NULL,
 
-    CONSTRAINT "BeneficiaryDetails_pkey" PRIMARY KEY ("aadhaarVaultReference")
+    CONSTRAINT "beneficiary_detail_pkey" PRIMARY KEY ("aadhaarVaultReference")
 );
 
 -- CreateTable
-CREATE TABLE "SchemeTransaction" (
+CREATE TABLE "scheme_transaction" (
     "id" SERIAL NOT NULL,
     "schemeCode" TEXT NOT NULL,
     "aadhaarNumber" TEXT NOT NULL,
@@ -44,5 +44,5 @@ CREATE TABLE "SchemeTransaction" (
     "remarks" TEXT,
     "departmentData" JSONB,
 
-    CONSTRAINT "SchemeTransaction_pkey" PRIMARY KEY ("id")
+    CONSTRAINT "scheme_transaction_pkey" PRIMARY KEY ("id")
 );

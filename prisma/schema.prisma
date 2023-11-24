@@ -10,7 +10,7 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-model BeneficiaryDetails {
+model beneficiary_detail {
   aadhaarVaultReference     String @id
   beneficiaryName           String
   beneficiaryFatherName     String
@@ -38,7 +38,7 @@ model BeneficiaryDetails {
   spdpFamilyId              String
 }
 
-model SchemeTransaction {
+model scheme_transaction {
   id                     Int     @id @default(autoincrement())
   schemeCode             String
   aadhaarNumber          String

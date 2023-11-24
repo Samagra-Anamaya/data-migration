@@ -75,13 +75,13 @@ export class PrismaService extends PrismaClient {
 
   async saveBeneficiaryDetails(beneficiaryDetails: any[]) {
     const record = await this.createRecord(beneficiaryDetails);
-    return await this.beneficiaryDetails.createMany({
+    return await this.beneficiary_detail.createMany({
       data: record,
     });
   }
 
   async saveSchemeTransaction(schemeTransactions: SchemeTransactionDto[]) {
-    await this.schemeTransaction.createMany({
+    await this.scheme_transaction.createMany({
       data: schemeTransactions,
     });
   }
