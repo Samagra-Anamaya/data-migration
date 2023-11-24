@@ -45,7 +45,7 @@ export class DataScraperService {
       securityKey = await this.authenticateUser();
     }
     this.loggerService.success(`Authenticated and received securityKey`);
-    await this.fetchDataForDistrictLGDCode(districtLGDCode, securityKey);
+    this.fetchDataForDistrictLGDCode(districtLGDCode, securityKey);
     return 'success';
   }
 
@@ -62,6 +62,7 @@ export class DataScraperService {
       this.fetchDataForDistrictLGDCode(districtLGDCode, securityKey);
       districtLGDCode = this.excelReaderService.readNextLine();
     }
+    return 'success';
   }
 
   async fetchDataForDistrictLGDCode(
