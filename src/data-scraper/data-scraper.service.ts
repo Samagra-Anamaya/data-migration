@@ -36,13 +36,20 @@ export class DataScraperService {
       this.loggerService.error('Wrong auth credentials');
       return '';
     }
+    if (authResponse.status === 'Failure') {
+      console.log('Auth failed:', authResponse.message);
+      return undefined;
+    }
     return authResponse.securityKey;
   }
 
   async scrapeDataForDistrict(districtLGDCode: string) {
     console.log('Authenticating user');
     const securityKey = await this.authenticateUser();
-    if (!securityKey) return { message: 'auth failed' };
+    if (!securityKey) {
+      console.log('Auth failed');
+      return { message: 'auth failed' };
+    }
     this.loggerService.success(`Authenticated and received securityKey`);
     this.fetchDataForDistrictLGDCode(districtLGDCode, securityKey);
     return { message: 'success' };
@@ -51,8 +58,10 @@ export class DataScraperService {
   async scrapeSPDPData() {
     console.log('Authenticating user');
     const securityKey = await this.authenticateUser();
-    if (!securityKey) return { message: 'auth failed' };
-    this.loggerService.success(`Authenticated and received securityKey`);
+    if (!securityKey) {
+      console.log('Auth failed');
+      return { message: 'auth failed' };
+    }
     let districtLGDCode = this.excelReaderService.readNextLine();
     while (districtLGDCode !== null) {
       console.log(`Fetching details for distLGDCode ${districtLGDCode}`);
