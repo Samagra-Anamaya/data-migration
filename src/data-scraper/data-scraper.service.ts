@@ -92,10 +92,12 @@ export class DataScraperService {
     // 1/n as we don't know number of batches per district until we fetch atleast one
     // currentBatch updated on each successful data pull
     let currentBatch = '0/n';
-
-    const latestBatch = await this.prismaService.getLatestBatch(
-      districtLGDCode,
-    );
+    let latestBatch = [];
+    try {
+      latestBatch = await this.prismaService.getLatestBatch(districtLGDCode);
+    } catch (err) {
+      console.log('Code Unit 1 Failed');
+    }
     if (latestBatch.length > 0) {
       batch_no = Number(latestBatch[0].batch_no) - 1;
       total_batch = latestBatch[0].total_batch;
@@ -109,11 +111,15 @@ export class DataScraperService {
         distLGDCode: districtLGDCode,
       };
       try {
-        await this.prismaService.dataFetchStarted(
-          districtLGDCode,
-          String(batch_no + 1),
-          total_batch,
-        );
+        try {
+          await this.prismaService.dataFetchStarted(
+            districtLGDCode,
+            String(batch_no + 1),
+            total_batch,
+          );
+        } catch (err) {
+          console.log('Code Unit 2 Failed');
+        }
         this.loggerService.success(
           `Batch ${batch_no + 1}/${total_batch} Pull Started`,
           districtLGDCode,
@@ -124,11 +130,15 @@ export class DataScraperService {
           { headers: headers },
         );
       } catch (error) {
-        await this.prismaService.dataPullFailed(
-          districtLGDCode,
-          String(batch_no + 1),
-          total_batch,
-        );
+        try {
+          await this.prismaService.dataPullFailed(
+            districtLGDCode,
+            String(batch_no + 1),
+            total_batch,
+          );
+        } catch (err) {
+          console.log('Code Unit 3 Failed');
+        }
         this.loggerService.error(
           `Batch ${batch_no + 1}/${total_batch} Pull Failed`,
           districtLGDCode,
@@ -138,11 +148,15 @@ export class DataScraperService {
       currentBatch = response.data.currentBatch;
       batch_no = Number(currentBatch.split('/')[0]);
       total_batch = currentBatch.split('/')[1];
-      await this.prismaService.dataPulled(
-        districtLGDCode,
-        String(batch_no),
-        total_batch,
-      );
+      try {
+        await this.prismaService.dataPulled(
+          districtLGDCode,
+          String(batch_no),
+          total_batch,
+        );
+      } catch (err) {
+        console.log('Code Unit 4 Failed');
+      }
       this.loggerService.success(
         `Batch ${batch_no}/${total_batch} Pull Success`,
         districtLGDCode,
@@ -151,11 +165,15 @@ export class DataScraperService {
         await this.prismaService.saveBeneficiaryDetails(
           response.data.beneficiaryDetails,
         );
-        await this.prismaService.dataSavedInDatabase(
-          districtLGDCode,
-          String(batch_no),
-          total_batch,
-        );
+        try {
+          await this.prismaService.dataSavedInDatabase(
+            districtLGDCode,
+            String(batch_no),
+            total_batch,
+          );
+        } catch (err) {
+          console.log('Code Unit 5 Failed');
+        }
         this.loggerService.success(
           `Batch ${batch_no}/${total_batch} Database Save Success`,
           districtLGDCode,
@@ -165,21 +183,29 @@ export class DataScraperService {
         const filePath = `${__dirname}/${districtLGDCode}_${batch_no}`;
         try {
           fs.writeFileSync(filePath, JSON.stringify(response.data), 'utf-8');
-          await this.prismaService.dataSavedInFile(
-            districtLGDCode,
-            String(batch_no),
-            total_batch,
-          );
+          try {
+            await this.prismaService.dataSavedInFile(
+              districtLGDCode,
+              String(batch_no),
+              total_batch,
+            );
+          } catch (err) {
+            console.log('Code Unit 6 Failed');
+          }
           this.loggerService.success(
             `Batch ${batch_no}/${total_batch} File Save Success`,
             districtLGDCode,
           );
         } catch (error) {
-          await this.prismaService.dataSaveFailed(
-            districtLGDCode,
-            String(batch_no),
-            total_batch,
-          );
+          try {
+            await this.prismaService.dataSaveFailed(
+              districtLGDCode,
+              String(batch_no),
+              total_batch,
+            );
+          } catch (err) {
+            console.log('Code Unit 7 Failed');
+          }
           this.loggerService.error(
             `Batch ${batch_no}/${total_batch} File Save Failure`,
             districtLGDCode,
