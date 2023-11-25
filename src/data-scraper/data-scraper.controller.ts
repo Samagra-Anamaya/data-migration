@@ -8,11 +8,22 @@ export class DataScraperController {
 
   @Post('scrapeDataForDistrict')
   async scrapeDataForDistrict(@Body() districtDto: DistrictDto) {
-    this.dataScraperService.scrapeDataForDistrict(districtDto.districtLGDCode);
+    return this.dataScraperService.scrapeDataForDistrict(
+      districtDto.districtLGDCode,
+    );
   }
 
   @Post('scrapeData')
   async scrapeData() {
-    await this.dataScraperService.scrapeSPDPData();
+    return this.dataScraperService.scrapeSPDPData();
+  }
+
+  @Post('saveDataForDistrict')
+  async saveDataForDistrict(@Body() batchData: any) {
+    return await this.dataScraperService.saveDataForDistrict(
+      batchData.districtLGDCode,
+      batchData.batchNo,
+      batchData.data,
+    );
   }
 }

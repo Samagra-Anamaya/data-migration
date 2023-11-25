@@ -214,4 +214,55 @@ export class DataScraperService {
       }
     }
   }
+
+  async saveDataForDistrict(
+    districtLGDCode: string,
+    batch_no: number,
+    batchData: any,
+  ) {
+    const total_batch = batchData.currentBatch.split('/')[1];
+    try {
+      await this.prismaService.dataPulled(
+        districtLGDCode,
+        String(batch_no),
+        total_batch,
+      );
+    } catch (err) {
+      console.log('Code Unit 1 Failed in saveDataForDistrict');
+    }
+    try {
+      await this.prismaService.saveBeneficiaryDetails(
+        batchData.beneficiaryDetails,
+      );
+      try {
+        await this.prismaService.dataSavedInDatabase(
+          districtLGDCode,
+          String(batch_no),
+          total_batch,
+        );
+      } catch (err) {
+        console.log('Code Unit 2 Failed in saveDataForDistrict');
+      }
+      this.loggerService.success(
+        `Batch ${batch_no}/${total_batch} Database Save Success`,
+        districtLGDCode,
+      );
+    } catch (_error) {
+      try {
+        await this.prismaService.dataSaveFailed(
+          districtLGDCode,
+          String(batch_no),
+          total_batch,
+        );
+      } catch (err) {
+        console.log('Code Unit 3 Failed in saveDataForDistrict');
+      }
+      this.loggerService.error(
+        `Batch ${batch_no}/${total_batch} File Save Failure`,
+        districtLGDCode,
+      );
+      return { message: 'Failure' };
+    }
+    return { message: 'Success' };
+  }
 }
