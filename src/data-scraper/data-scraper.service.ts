@@ -222,15 +222,6 @@ export class DataScraperService {
   ) {
     const total_batch = batchData.currentBatch.split('/')[1];
     try {
-      await this.prismaService.dataPulled(
-        districtLGDCode,
-        String(batch_no),
-        total_batch,
-      );
-    } catch (err) {
-      console.log('Code Unit 1 Failed in saveDataForDistrict');
-    }
-    try {
       await this.prismaService.saveBeneficiaryDetails(
         batchData.beneficiaryDetails,
       );
@@ -248,19 +239,6 @@ export class DataScraperService {
         districtLGDCode,
       );
     } catch (_error) {
-      try {
-        await this.prismaService.dataSaveFailed(
-          districtLGDCode,
-          String(batch_no),
-          total_batch,
-        );
-      } catch (err) {
-        console.log('Code Unit 3 Failed in saveDataForDistrict');
-      }
-      this.loggerService.error(
-        `Batch ${batch_no}/${total_batch} File Save Failure`,
-        districtLGDCode,
-      );
       return { message: 'Failure' };
     }
     return { message: 'Success' };
