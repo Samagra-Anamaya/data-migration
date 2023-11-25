@@ -11,7 +11,8 @@ datasource db {
 }
 
 model beneficiary_detail {
-  aadhaarVaultReference     String @id
+  id                        Int    @id @default(autoincrement())
+  aadhaarVaultReference     String
   beneficiaryName           String
   beneficiaryFatherName     String
   beneficiaryMotherName     String
