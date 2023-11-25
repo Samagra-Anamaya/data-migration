@@ -1,5 +1,5 @@
 import { Injectable } from '@nestjs/common';
-import { PrismaClient, Status } from '@prisma/client';
+import { PrismaClient, Status, data_migration_status } from '@prisma/client';
 import { SchemeTransactionDto } from 'src/ste/dto/scheme.transaction.dto';
 
 @Injectable()
@@ -87,15 +87,18 @@ export class PrismaService extends PrismaClient {
   }
 
   async getLatestBatch(distLGDCode: string) {
-    return await this.data_migration_status.findMany({
-      where: {
-        district_code: distLGDCode,
-      },
-      orderBy: {
-        batch_no: 'desc',
-      },
-      take: 1,
-    });
+    // return await this.data_migration_status.findMany({
+    //   where: {
+    //     district_code: distLGDCode,
+    //   },
+    //   orderBy: {
+    //     batch_no: 'desc',
+    //   },
+    //   take: 1,
+    // });
+    return await this.$queryRaw<
+      data_migration_status[]
+    >`SELECT * FROM data_migration_status WHERE district_code=${distLGDCode} ORDER BY CAST(batch_no AS INT) DESC LIMIT 1`;
   }
 
   async dataFetchStarted(
