@@ -52,6 +52,7 @@ model scheme_transaction {
   transactionDate        String
   remarks                String?
   departmentData         Json?
+  departmentUsername     String @default("")
 }
 
 model data_migration_status {
