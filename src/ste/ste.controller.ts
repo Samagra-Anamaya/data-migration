@@ -1,6 +1,14 @@
-import { Body, Controller, Get, Post, Req, UseGuards } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Get,
+  ParseArrayPipe,
+  Post,
+  Req,
+  UseGuards,
+} from '@nestjs/common';
 import { SteService } from './ste.service';
-import { SchemeTransactionDto } from './dto/scheme.transaction.dto';
+import { SchemeTransactionEvent } from './dto/scheme.transaction.dto';
 import { AuthDto } from './dto/auth.dto';
 import { AuthGuard } from 'src/common/auth-guard';
 import { Public } from 'src/common/public.decorator';
@@ -22,25 +30,26 @@ export class SteController {
 
   @Post('/saveSchemeTransaction')
   async saveSchemeTransaction(
-    @Body() schemeTransactionDetail: SchemeTransactionDto,
+    @Body(new ParseArrayPipe({ items: SchemeTransactionEvent }))
+    schemeTransactionDetail: SchemeTransactionEvent[],
     @Req() request: Request,
   ) {
-    const usernameHeader = request.headers.username;
-    const username: string = Array.isArray(usernameHeader)
-      ? usernameHeader[0]
-      : usernameHeader;
+    const userIdHeader = request.headers.userId;
+    const userId: string = Array.isArray(userIdHeader)
+      ? userIdHeader[0]
+      : userIdHeader;
     return await this.steService.saveSchemeTransaction(
       schemeTransactionDetail,
-      username,
+      userId,
     );
   }
 
   @Get('/progress')
   async getProgress(@Req() request: Request) {
-    const usernameHeader = request.headers.username;
-    const username: string = Array.isArray(usernameHeader)
-      ? usernameHeader[0]
-      : usernameHeader;
-    return await this.steService.getProgress(username);
+    const userIdHeader = request.headers.userId;
+    const userId: string = Array.isArray(userIdHeader)
+      ? userIdHeader[0]
+      : userIdHeader;
+    return await this.steService.getProgress(userId);
   }
 }

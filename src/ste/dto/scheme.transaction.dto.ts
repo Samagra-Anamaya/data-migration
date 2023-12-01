@@ -3,10 +3,11 @@ import {
   IsNotEmpty,
   IsNumber,
   IsNumberString,
+  IsOptional,
   IsString,
 } from 'class-validator';
 
-export class SchemeTransaction {
+export class SchemeTransactionEvent {
   @IsNotEmpty()
   @IsString()
   schemeCode: string;
@@ -43,26 +44,10 @@ export class SchemeTransaction {
   @IsString()
   transactionDate: string;
 
+  @IsOptional()
   @IsString()
   remarks: string;
 
   @IsNotEmpty()
   departmentData: JsonArray = [];
-}
-
-export class SchemeTransactionDto {
-  @IsNotEmpty()
-  @IsNumber()
-  batch_number: number;
-
-  @IsNotEmpty()
-  @IsNumber()
-  batch_size: number;
-
-  @IsNotEmpty()
-  @IsNumber()
-  total_records: number;
-
-  @IsNotEmpty()
-  transactions: SchemeTransaction[];
 }

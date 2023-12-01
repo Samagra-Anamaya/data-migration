@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { PrismaService } from 'src/prisma/prisma.service';
-import { SchemeTransactionDto } from './dto/scheme.transaction.dto';
+import { SchemeTransactionEvent } from './dto/scheme.transaction.dto';
 import axios from 'axios';
 
 @Injectable()
@@ -37,33 +37,57 @@ export class SteService {
   }
 
   async saveSchemeTransaction(
-    schemetransactions: SchemeTransactionDto,
-    deptUsername: string,
+    schemetransactions: SchemeTransactionEvent[],
+    userId: string,
   ) {
+    let transactionHistoryId;
+    let recordsSaved;
+    let errors;
+    const transactionStartTime = new Date();
     try {
       await this.prismaService.saveSchemeTransaction(
-        schemetransactions.transactions,
-        deptUsername,
+        schemetransactions,
+        userId,
       );
+      const transactionHistory =
+        await this.prismaService.transaction_history_table.create({
+          data: {
+            requestBody: JSON.parse(JSON.stringify(schemetransactions)),
+            errors: [],
+            userId,
+            transactionStartTime: transactionStartTime,
+            transactionEndTime: new Date(),
+          },
+        });
+      transactionHistoryId = transactionHistory.id;
+      recordsSaved = schemetransactions.length;
+      errors = 0;
     } catch (err) {
-      console.error(
-        `Error saving records for batch: ${schemetransactions.batch_number} of dept: ${deptUsername}`,
-      );
-      return {
-        message: `Error saving records for batch: ${schemetransactions.batch_number}`,
-      };
+      const transactionHistory =
+        await this.prismaService.transaction_history_table.create({
+          data: {
+            requestBody: JSON.parse(JSON.stringify(schemetransactions)),
+            containErrors: true,
+            errors: [],
+            userId,
+            transactionStartTime,
+            transactionEndTime: new Date(),
+          },
+        });
+      transactionHistoryId = transactionHistory.id;
+      recordsSaved = 0;
+      errors = schemetransactions.length;
     }
-    console.log(
-      `Success saving records for batch: ${schemetransactions.batch_number} of dept: ${deptUsername}`,
-    );
     return {
-      message: `Success saving records for batch: ${schemetransactions.batch_number}`,
+      transactionId: transactionHistoryId,
+      recordsSaved: recordsSaved,
+      errors: errors,
     };
   }
 
-  async getProgress(deptUsername: string) {
+  async getProgress(userId: string) {
     const recordCount = await this.prismaService.getRecordCountByDeptUsername(
-      deptUsername,
+      userId,
     );
     return { records_saved: recordCount };
   }

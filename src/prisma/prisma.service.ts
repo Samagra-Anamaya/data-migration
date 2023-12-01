@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { PrismaClient, Status, data_migration_status } from '@prisma/client';
-import { SchemeTransaction } from 'src/ste/dto/scheme.transaction.dto';
+import { SchemeTransactionEvent } from 'src/ste/dto/scheme.transaction.dto';
 import { map } from 'lodash';
 
 @Injectable()
@@ -82,7 +82,7 @@ export class PrismaService extends PrismaClient {
   }
 
   async transformSchemeTransaction(
-    schemeTransactions: SchemeTransaction[],
+    schemeTransactions: SchemeTransactionEvent[],
     deptUsername: string,
   ): Promise<any[]> {
     return await Promise.all(
@@ -96,7 +96,7 @@ export class PrismaService extends PrismaClient {
   }
 
   async saveSchemeTransaction(
-    schemeTransactions: SchemeTransaction[],
+    schemeTransactions: SchemeTransactionEvent[],
     deptUsername: string,
   ) {
     const records = await this.transformSchemeTransaction(
@@ -111,7 +111,7 @@ export class PrismaService extends PrismaClient {
   async getRecordCountByDeptUsername(deptUsername: string) {
     return await this.scheme_transaction.count({
       where: {
-        departmentUsername: deptUsername,
+        userId: deptUsername,
       },
     });
   }
