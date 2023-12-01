@@ -46,8 +46,12 @@ export class SchemeTransactionEvent {
 
   @IsOptional()
   @IsString()
-  remarks: string;
+  remarks = '';
 
   @IsNotEmpty()
   departmentData: JsonArray = [];
+}
+
+export class SchemeTransactionEventDto {
+  data: SchemeTransactionEvent[];
 }

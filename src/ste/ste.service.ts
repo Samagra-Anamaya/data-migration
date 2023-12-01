@@ -1,12 +1,14 @@
-import { Injectable } from '@nestjs/common';
+import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { PrismaService } from 'src/prisma/prisma.service';
 import { SchemeTransactionEvent } from './dto/scheme.transaction.dto';
 import axios from 'axios';
+import { SteValidator } from './ste.validator';
 
 @Injectable()
 export class SteService {
   constructor(private readonly prismaService: PrismaService) {}
 
+  private steValidator = new SteValidator();
   private userServiceBaseUrl = process.env.USER_SERVICE;
   private steApplicationId = process.env.APPLICATION_ID;
 
@@ -40,49 +42,54 @@ export class SteService {
     schemetransactions: SchemeTransactionEvent[],
     userId: string,
   ) {
-    let transactionHistoryId;
-    let recordsSaved;
-    let errors;
     const transactionStartTime = new Date();
-    try {
-      await this.prismaService.saveSchemeTransaction(
-        schemetransactions,
-        userId,
-      );
-      const transactionHistory =
-        await this.prismaService.transaction_history_table.create({
-          data: {
-            requestBody: JSON.parse(JSON.stringify(schemetransactions)),
-            errors: [],
-            userId,
-            transactionStartTime: transactionStartTime,
-            transactionEndTime: new Date(),
-          },
-        });
-      transactionHistoryId = transactionHistory.id;
-      recordsSaved = schemetransactions.length;
-      errors = 0;
-    } catch (err) {
-      const transactionHistory =
-        await this.prismaService.transaction_history_table.create({
-          data: {
-            requestBody: JSON.parse(JSON.stringify(schemetransactions)),
-            containErrors: true,
-            errors: [],
-            userId,
-            transactionStartTime,
-            transactionEndTime: new Date(),
-          },
-        });
-      transactionHistoryId = transactionHistory.id;
-      recordsSaved = 0;
-      errors = schemetransactions.length;
-    }
+    const schemeTransactionEvents = JSON.parse(
+      JSON.stringify(schemetransactions),
+    );
+    const validatedSchemeTransactionEventBody =
+      await this.validateSchemeTransactionEventBody(schemeTransactionEvents);
+    const validSchemeTransactions =
+      validatedSchemeTransactionEventBody.validSchemeTransactions;
+
+    await this.prismaService.saveSchemeTransaction(
+      validSchemeTransactions,
+      userId,
+    );
+
+    const transactionHistory =
+      await this.prismaService.transaction_history_table.create({
+        data: {
+          requestBody: schemeTransactionEvents,
+          containErrors: validatedSchemeTransactionEventBody.errorCount !== 0,
+          errors: validatedSchemeTransactionEventBody.errors,
+          userId,
+          transactionStartTime: transactionStartTime,
+          transactionEndTime: new Date(),
+        },
+      });
+    console.log(validatedSchemeTransactionEventBody.errors);
     return {
-      transactionId: transactionHistoryId,
-      recordsSaved: recordsSaved,
-      errors: errors,
+      transactionId: transactionHistory.id,
+      savedTransactionsCount:
+        validatedSchemeTransactionEventBody.validSchemeTransactions.length,
+      errorTransactionsCount: validatedSchemeTransactionEventBody.errorCount,
     };
+  }
+
+  async getTransactionHistory(transactionHistoryid: string) {
+    const transactionHistory =
+      await this.prismaService.transaction_history_table.findUnique({
+        where: {
+          id: transactionHistoryid,
+        },
+      });
+    if (!transactionHistory) {
+      throw new HttpException(
+        `No transaction history found with id ${transactionHistoryid}`,
+        HttpStatus.BAD_REQUEST,
+      );
+    }
+    return transactionHistory;
   }
 
   async getProgress(userId: string) {
@@ -90,5 +97,31 @@ export class SteService {
       userId,
     );
     return { records_saved: recordCount };
+  }
+
+  async validateSchemeTransactionEventBody(
+    schemeTransactionEvents: any[],
+  ): Promise<any> {
+    const validatedArray = {};
+    validatedArray['validSchemeTransactions'] = [];
+    validatedArray['errors'] = {};
+    let errorCount = 0;
+    for (let i = 0; i < schemeTransactionEvents.length; i++) {
+      const errors = this.steValidator.validateSchemeTransactionEvent(
+        schemeTransactionEvents[i],
+      );
+      if (errors.length === 0) {
+        validatedArray['validSchemeTransactions'].push(
+          schemeTransactionEvents[i],
+        );
+      } else {
+        errorCount++;
+        validatedArray['errors'][`${i}`] = errors;
+      }
+    }
+    validatedArray['errorCount'] = errorCount;
+    validatedArray['validSchemeTransactionsCount'] =
+      validatedArray['validSchemeTransactions'].length;
+    return validatedArray;
   }
 }

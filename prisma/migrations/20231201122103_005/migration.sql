@@ -3,7 +3,7 @@ CREATE TABLE "transaction_history_table" (
     "id" UUID NOT NULL DEFAULT gen_random_uuid(),
     "requestBody" JSONB[],
     "containErrors" BOOLEAN NOT NULL DEFAULT false,
-    "errors" JSONB[] DEFAULT ARRAY[]::JSONB[],
+    "errors" JSONB NOT NULL,
     "userId" TEXT NOT NULL,
     "transactionStartTime" TIMESTAMP(3) NOT NULL,
     "transactionEndTime" TIMESTAMP(3) NOT NULL,

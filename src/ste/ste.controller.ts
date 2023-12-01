@@ -2,13 +2,13 @@ import {
   Body,
   Controller,
   Get,
-  ParseArrayPipe,
+  Param,
   Post,
   Req,
   UseGuards,
 } from '@nestjs/common';
 import { SteService } from './ste.service';
-import { SchemeTransactionEvent } from './dto/scheme.transaction.dto';
+import { SchemeTransactionEventDto } from './dto/scheme.transaction.dto';
 import { AuthDto } from './dto/auth.dto';
 import { AuthGuard } from 'src/common/auth-guard';
 import { Public } from 'src/common/public.decorator';
@@ -30,8 +30,7 @@ export class SteController {
 
   @Post('/saveSchemeTransaction')
   async saveSchemeTransaction(
-    @Body(new ParseArrayPipe({ items: SchemeTransactionEvent }))
-    schemeTransactionDetail: SchemeTransactionEvent[],
+    @Body() schemeTransactionDetail: SchemeTransactionEventDto,
     @Req() request: Request,
   ) {
     const userIdHeader = request.headers.userId;
@@ -39,9 +38,14 @@ export class SteController {
       ? userIdHeader[0]
       : userIdHeader;
     return await this.steService.saveSchemeTransaction(
-      schemeTransactionDetail,
+      schemeTransactionDetail.data,
       userId,
     );
+  }
+
+  @Get('/transactionHistory/:id')
+  async getTransactionHistory(@Param('id') transactionHistoryid: string) {
+    return await this.steService.getTransactionHistory(transactionHistoryid);
   }
 
   @Get('/progress')

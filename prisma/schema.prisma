@@ -59,7 +59,7 @@ model transaction_history_table {
   id                   String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
   requestBody          Json[]
   containErrors        Boolean  @default(false)
-  errors               Json[]   @default([])
+  errors               Json
   userId               String
   transactionStartTime DateTime
   transactionEndTime   DateTime

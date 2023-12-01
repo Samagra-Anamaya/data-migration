@@ -88,7 +88,7 @@ export class PrismaService extends PrismaClient {
     return await Promise.all(
       map(schemeTransactions, async (transaction) => {
         return {
-          departmentUsername: deptUsername,
+          userId: deptUsername,
           ...transaction,
         };
       }),
