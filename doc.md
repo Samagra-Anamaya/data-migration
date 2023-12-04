@@ -96,6 +96,32 @@ Payload. `data` key is a JSON Array containing Scheme Transactions to be saved (
                 {
                     "marker": "Date of Birth",
                     "value": "21-01-1999"
+                },
+                {
+                    "marker": "Social Category",
+                    "value": "ST"
+                }
+            ]
+        },
+        {
+            "schemeCode": "VULC8",
+            "aadhaarNumber": "123412341234",
+            "aadhaarReferenceNumber": "1234123412345",
+            "uniqueBeneficiaryId": "5812844",
+            "financialYear": "2021-22",
+            "transactionType": "Cash",
+            "transactionAmount": 5000,
+            "inKindBenefitDetail": "Training",
+            "transactionDate": "12-08-2022",
+            "remarks": "",
+            "departmentData": [
+                {
+                    "marker": "Date of Birth",
+                    "value": "21-01-1999"
+                },
+                {
+                    "marker": "Social Category",
+                    "value": "ST"
                 }
             ]
         },
@@ -120,24 +146,6 @@ Payload. `data` key is a JSON Array containing Scheme Transactions to be saved (
                     "value": "ST"
                 }
             ]
-        },
-        {
-            "schemeCode": "VULC8",
-            "aadhaarNumber": "123412341234",
-            "aadhaarReferenceNumber": "1234123412345",
-            "uniqueBeneficiaryId": "5812844",
-            "financialYear": "2021-22",
-            "transactionType": "Cash",
-            "transactionAmount": 5000,
-            "inKindBenefitDetail": "Training",
-            "transactionDate": "12-08-2022",
-            "remarks": "",
-            "departmentData": [
-                {
-                    "marker": "Date of Birth",
-                    "value": "21-01-1999"
-                }
-            ]
         }
     ]
 }
@@ -145,7 +153,7 @@ Payload. `data` key is a JSON Array containing Scheme Transactions to be saved (
 Response
 ```json
 {
-    "transactionId": "55595af7-2e9d-4715-ad53-f531a22b04e0",
+    "transactionId": "40cba71b-3ede-4dd2-9cd6-a1fe3a111bed",
     "savedTransactionsCount": 1,
     "errorTransactionsCount": 3
 }
@@ -171,8 +179,8 @@ Request Header (Token received from Authentication API)
 Response
 ```json
 {
-    "id": "55595af7-2e9d-4715-ad53-f531a22b04e0",
-    "requestBody": [
+    "id": "40cba71b-3ede-4dd2-9cd6-a1fe3a111bed",
+    "request_body": [
         {
             "remarks": "",
             "schemeCode": "",
@@ -234,7 +242,7 @@ Response
             ],
             "transactionDate": "12-08-2022",
             "transactionType": "Cash",
-            "transactionAmount": "5000",
+            "transactionAmount": 5000,
             "inKindBenefitDetail": "Training",
             "uniqueBeneficiaryId": "5812844",
             "aadhaarReferenceNumber": "1234123412345"
@@ -256,57 +264,37 @@ Response
             ],
             "transactionDate": "12-08-2022",
             "transactionType": "Cash",
-            "transactionAmount": 5000,
+            "transactionAmount": "5000",
             "inKindBenefitDetail": "Training",
             "uniqueBeneficiaryId": "5812844",
             "aadhaarReferenceNumber": "1234123412345"
         }
     ],
-    "containErrors": true,
-    "validRecordsSaved": true,
+    "contain_errors": true,
+    "valid_records_saved": false,
     "errors": {
         "0": {
-            "schemeCode": [
-                "EMPTY SCHEME CODE"
-            ],
-            "aadhaarNumber": [
-                "AADHAAR NUMBER IS NOT A NUMBER"
-            ],
-            "financialYear": [
-                "FINANCIAL NOT IN FORMAT OF YYYY-YY"
-            ],
-            "transactionDate": [
-                "TRANSACTION DATE NOT IN FORMAT OF DD-MM-YYYY"
-            ],
-            "transactionType": [
-                "EMPTY TRANSACTION TYPE"
-            ],
-            "inKindBenefitDetail": [
-                "EMPTY IN KIND BENEFIT DETAIL"
-            ],
-            "uniqueBeneficiaryId": [
-                "EMPTY UNIQUE BENEFICIARY ID"
-            ],
-            "aadhaarReferenceNumber": [
-                "AADHAAR REFERENCE NUMBER SHOULD BE OF LENGTH 13"
-            ]
+            "schemeCode": "EMPTY SCHEME CODE",
+            "aadhaarNumber": "AADHAAR NUMBER IS NOT A NUMBER",
+            "financialYear": "FINANCIAL NOT IN FORMAT OF YYYY-YY",
+            "transactionDate": "TRANSACTION DATE NOT IN FORMAT OF DD-MM-YYYY",
+            "transactionType": "EMPTY TRANSACTION TYPE",
+            "inKindBenefitDetail": "EMPTY IN KIND BENEFIT DETAIL",
+            "uniqueBeneficiaryId": "EMPTY UNIQUE BENEFICIARY ID",
+            "aadhaarReferenceNumber": "AADHAAR REFERENCE NUMBER SHOULD BE OF LENGTH 13"
         },
         "1": {
-            "aadhaarNumber": [
-                "AADHAAR NUMBER SHOULD BE OF LENGTH 12"
-            ]
+            "aadhaarNumber": "AADHAAR NUMBER SHOULD BE OF LENGTH 12"
         },
-        "2": {
-            "transactionAmount": [
-                "TRANSACTION AMOUNT SHOULD BE AN INTEGER"
-            ]
+        "3": {
+            "transactionAmount": "TRANSACTION AMOUNT SHOULD BE AN INTEGER"
         }
     },
-    "userId": "749aa7ee-07b8-47ec-b920-952d10b0b7ff",
-    "transactionStartTime": "2023-12-04T05:53:30.361Z",
-    "transactionEndTime": "2023-12-04T05:53:30.417Z",
-    "createdAt": "2023-12-04T05:53:30.419Z",
-    "updatedAt": "2023-12-04T05:53:30.419Z"
+    "user_id": "749aa7ee-07b8-47ec-b920-952d10b0b7ff",
+    "transaction_start_time": "2023-12-04T11:07:19.961Z",
+    "transaction_end_time": "2023-12-04T11:07:19.973Z",
+    "created_at": "2023-12-04T11:07:19.975Z",
+    "updated_at": "2023-12-04T11:07:19.975Z"
 }
 ```
 Response keys: <br>
