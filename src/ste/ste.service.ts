@@ -121,7 +121,7 @@ export class SteService {
       const errors = this.steValidator.validateSchemeTransactionEvent(
         schemeTransactionEvents[i],
       );
-      if (errors.length === 0) {
+      if (Object.keys(errors).length === 0) {
         validatedArray['validSchemeTransactions'].push(
           schemeTransactionEvents[i],
         );

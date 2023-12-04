@@ -126,35 +126,44 @@ export class SteValidator {
     return error;
   }
 
-  validateSchemeTransactionEvent(schemeTransaction: any): string[] {
-    const errors = [];
-    errors.push(...this.validateSchemeCode(schemeTransaction.schemeCode));
-    errors.push(...this.validateAadhaarNumber(schemeTransaction.aadhaarNumber));
-    errors.push(
-      ...this.validateAadhaarReferenceNumber(
-        schemeTransaction.aadhaarReferenceNumber,
-      ),
+  validateSchemeTransactionEvent(schemeTransaction: any): any {
+    type ErrorObject = {
+      [key: string]: any[];
+    };
+    const errors: ErrorObject = {};
+    errors['schemeCode'] = this.validateSchemeCode(
+      schemeTransaction.schemeCode,
     );
-    errors.push(
-      ...this.validateUniqueBeneficiaryId(
-        schemeTransaction.uniqueBeneficiaryId,
-      ),
+    errors['aadhaarNumber'] = this.validateAadhaarNumber(
+      schemeTransaction.aadhaarNumber,
     );
-    errors.push(...this.validateFinancialYear(schemeTransaction.financialYear));
-    errors.push(
-      ...this.validateTransactionType(schemeTransaction.transactionType),
+    errors['aadhaarReferenceNumber'] = this.validateAadhaarReferenceNumber(
+      schemeTransaction.aadhaarReferenceNumber,
     );
-    errors.push(
-      ...this.validateTransactionAmount(schemeTransaction.transactionAmount),
+    errors['uniqueBeneficiaryId'] = this.validateUniqueBeneficiaryId(
+      schemeTransaction.uniqueBeneficiaryId,
     );
-    errors.push(
-      ...this.validateInKindBenefitDetail(
-        schemeTransaction.inKindBenefitDetail,
-      ),
+    errors['financialYear'] = this.validateFinancialYear(
+      schemeTransaction.financialYear,
     );
-    errors.push(
-      ...this.validateTransactionDate(schemeTransaction.transactionDate),
+    errors['transactionType'] = this.validateTransactionType(
+      schemeTransaction.transactionType,
     );
-    return errors;
+    errors['transactionAmount'] = this.validateTransactionAmount(
+      schemeTransaction.transactionAmount,
+    );
+    errors['inKindBenefitDetail'] = this.validateInKindBenefitDetail(
+      schemeTransaction.inKindBenefitDetail,
+    );
+    errors['transactionDate'] = this.validateTransactionDate(
+      schemeTransaction.transactionDate,
+    );
+    const resError = {};
+    Object.entries(errors).forEach(([key, value]) => {
+      if (value.length > 0) {
+        resError[key] = value;
+      }
+    });
+    return resError;
   }
 }
