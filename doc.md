@@ -265,28 +265,48 @@ Response
     "containErrors": true,
     "validRecordsSaved": true,
     "errors": {
-        "0": [
-            "EMPTY SCHEME CODE",
-            "AADHAAR NUMBER IS NOT A NUMBER",
-            "AADHAAR REFERENCE NUMBER SHOULD BE OF LENGTH 13",
-            "EMPTY UNIQUE BENEFICIARY ID",
-            "FINANCIAL NOT IN FORMAT OF YYYY-YY",
-            "EMPTY TRANSACTION TYPE",
-            "EMPTY IN KIND BENEFIT DETAIL",
-            "TRANSACTION DATE NOT IN FORMAT OF DD-MM-YYYY"
-        ],
-        "1": [
-            "AADHAAR NUMBER SHOULD BE OF LENGTH 12"
-        ],
-        "2": [
-            "TRANSACTION AMOUNT SHOULD BE AN INTEGER"
-        ]
+        "0": {
+            "schemeCode": [
+                "EMPTY SCHEME CODE"
+            ],
+            "aadhaarNumber": [
+                "AADHAAR NUMBER IS NOT A NUMBER"
+            ],
+            "financialYear": [
+                "FINANCIAL NOT IN FORMAT OF YYYY-YY"
+            ],
+            "transactionDate": [
+                "TRANSACTION DATE NOT IN FORMAT OF DD-MM-YYYY"
+            ],
+            "transactionType": [
+                "EMPTY TRANSACTION TYPE"
+            ],
+            "inKindBenefitDetail": [
+                "EMPTY IN KIND BENEFIT DETAIL"
+            ],
+            "uniqueBeneficiaryId": [
+                "EMPTY UNIQUE BENEFICIARY ID"
+            ],
+            "aadhaarReferenceNumber": [
+                "AADHAAR REFERENCE NUMBER SHOULD BE OF LENGTH 13"
+            ]
+        },
+        "1": {
+            "aadhaarNumber": [
+                "AADHAAR NUMBER SHOULD BE OF LENGTH 12"
+            ]
+        },
+        "2": {
+            "transactionAmount": [
+                "TRANSACTION AMOUNT SHOULD BE AN INTEGER"
+            ]
+        }
     },
     "userId": "749aa7ee-07b8-47ec-b920-952d10b0b7ff",
-    "transactionStartTime": "2023-12-04T04:04:33.064Z",
-    "transactionEndTime": "2023-12-04T04:04:33.124Z",
-    "createdAt": "2023-12-04T04:04:33.126Z",
-    "updatedAt": "2023-12-04T04:04:33.126Z"
+    "transactionStartTime": "2023-12-04T05:53:30.361Z",
+    "transactionEndTime": "2023-12-04T05:53:30.417Z",
+    "createdAt": "2023-12-04T05:53:30.419Z",
+    "updatedAt": "2023-12-04T05:53:30.419Z"
 }
 ```
 Response keys: <br>
