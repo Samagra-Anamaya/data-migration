@@ -51,23 +51,34 @@ export class SteService {
     const validSchemeTransactions =
       validatedSchemeTransactionEventBody.validSchemeTransactions;
 
-    await this.prismaService.saveSchemeTransaction(
-      validSchemeTransactions,
-      userId,
-    );
-
-    const transactionHistory =
-      await this.prismaService.transaction_history_table.create({
-        data: {
-          requestBody: schemeTransactionEvents,
-          containErrors: validatedSchemeTransactionEventBody.errorCount !== 0,
-          errors: validatedSchemeTransactionEventBody.errors,
-          userId,
-          transactionStartTime: transactionStartTime,
-          transactionEndTime: new Date(),
-        },
-      });
-    console.log(validatedSchemeTransactionEventBody.errors);
+    let validSchemeTransactionsSaved = false;
+    try {
+      await this.prismaService.saveSchemeTransaction(
+        validSchemeTransactions,
+        userId,
+      );
+      validSchemeTransactionsSaved = true;
+    } catch (error) {}
+    let transactionHistory;
+    try {
+      transactionHistory =
+        await this.prismaService.transaction_history_table.create({
+          data: {
+            requestBody: schemeTransactionEvents,
+            containErrors: validatedSchemeTransactionEventBody.errorCount !== 0,
+            errors: validatedSchemeTransactionEventBody.errors,
+            userId,
+            validRecordsSaved: validSchemeTransactionsSaved,
+            transactionStartTime: transactionStartTime,
+            transactionEndTime: new Date(),
+          },
+        });
+    } catch (error) {
+      console.log(
+        `Transaction History Save Failed for ${userId}`,
+        validatedSchemeTransactionEventBody,
+      );
+    }
     return {
       transactionId: transactionHistory.id,
       savedTransactionsCount:
