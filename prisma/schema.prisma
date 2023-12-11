@@ -90,57 +90,57 @@ enum Status {
 model pre_matric_scholarship {
   id                     Int     @id @default(autoincrement())
   serial                 String?
-  scheme_name            String? @db.VarChar(127)
-  academic_year          String? @db.VarChar(15)
-  category               String? @db.VarChar(15)
-  religion               String? @db.VarChar(31)
-  gender                 String? @db.VarChar(15)
-  aadhaar_no             String? @db.VarChar(12)
-  student_name           String? @db.VarChar(127)
-  father_name            String? @db.VarChar(127)
-  mother_name            String? @db.VarChar(127)
-  dob                    String? @db.VarChar(15)
-  mobile_no              String? @db.VarChar(15)
-  alternate_mobile_no    String? @db.VarChar(15)
-  email_id               String? @db.VarChar(127)
-  domicile_district      String? @db.VarChar(127)
-  domicile_block         String? @db.VarChar(127)
-  full_address           String? @db.VarChar(511)
-  institute_name         String? @db.VarChar(255)
-  institution_type       String? @db.VarChar(31)
-  address_of_institution String? @db.VarChar(511)
-  class                  String? @db.VarChar(15)
+  scheme_name            String?
+  academic_year          String?
+  category               String?
+  religion               String?
+  gender                 String?
+  aadhaar_no             String?
+  student_name           String?
+  father_name            String?
+  mother_name            String?
+  dob                    String?
+  mobile_no              String?
+  alternate_mobile_no    String?
+  email_id               String?
+  domicile_district      String?
+  domicile_block         String?
+  full_address           String?
+  institute_name         String?
+  institution_type       String?
+  address_of_institution String?
+  class                  String?
 }
 
 model post_matric_scholarship {
   id                      Int     @id @default(autoincrement())
   serial                  String?
-  scheme_name             String? @db.VarChar(127)
-  academic_year           String? @db.VarChar(15)
-  category                String? @db.VarChar(15)
-  religion                String? @db.VarChar(31)
-  gender                  String? @db.VarChar(15)
-  aadhaar_no              String? @db.VarChar(12)
-  student_name            String? @db.VarChar(127)
-  father_name             String? @db.VarChar(127)
-  mother_name             String? @db.VarChar(127)
-  dob                     String? @db.VarChar(15)
-  mobile_no               String? @db.VarChar(15)
-  alternate_mobile_no     String? @db.VarChar(15)
-  email_id                String? @db.VarChar(127)
-  domicile_district       String? @db.VarChar(127)
-  domicile_block          String? @db.VarChar(127)
-  full_address            String? @db.VarChar(511)
-  institute_name          String? @db.VarChar(255)
-  institution_type        String? @db.VarChar(31)
-  institution_district    String? @db.VarChar(63)
-  address_of_institution  String? @db.VarChar(511)
-  course                  String? @db.VarChar(63)
-  branch                  String? @db.VarChar(63)
-  course_year             String? @db.VarChar(15)
-  residential_status      String? @db.VarChar(31)
-  matric_roll_no          String? @db.VarChar(31)
-  matric_passing_year     String? @db.VarChar(15)
-  matric_board_name       String? @db.VarChar(63)
+  scheme_name             String?
+  academic_year           String?
+  category                String?
+  religion                String?
+  gender                  String?
+  aadhaar_no              String?
+  student_name            String?
+  father_name             String?
+  mother_name             String?
+  dob                     String?
+  mobile_no               String?
+  alternate_mobile_no     String?
+  email_id                String?
+  domicile_district       String?
+  domicile_block          String?
+  full_address            String?
+  institute_name          String?
+  institution_type        String?
+  institution_district    String?
+  address_of_institution  String?
+  course                  String?
+  branch                  String?
+  course_year             String?
+  residential_status      String?
+  matric_roll_no          String?
+  matric_passing_year     String?
+  matric_board_name       String?
   total_sanctioned_amount String?
 }
