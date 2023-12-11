@@ -108,6 +108,7 @@ model pre_matric_scholarship {
   full_address           String?
   institute_name         String?
   institution_type       String?
+  institution_district   String?
   address_of_institution String?
   class                  String?
 }
